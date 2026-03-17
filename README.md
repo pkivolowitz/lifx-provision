@@ -38,7 +38,7 @@ cd /tmp && curl -O https://raw.githubusercontent.com/pkivolowitz/lifx-provision/
 ### Provisioning Your Bulbs
 
 1. Reset your bulbs: flip the light switch off and on 5 times. Each bulb flashes colors when reset.
-2. Click the **WiFi icon** in your Mac's menu bar (top right of screen)
+2. Open **System Settings → WiFi** (the menu bar WiFi dropdown closes when you click away — use the full settings window instead)
 3. You will see entries like "LIFX A19 D073D5" — these are your reset bulbs. Write them down.
 4. Open **Terminal** and type (replacing the values with your own):
 
@@ -75,7 +75,7 @@ No Apple Developer account. No code signing. No permissions.
 ### Usage
 
 1. Reset your bulbs (power cycle 5 times each — they flash to confirm)
-2. Click the WiFi icon in the menu bar — note the "LIFX ..." SSIDs
+2. Open System Settings → WiFi — note the "LIFX ..." SSIDs (use the settings window, not the menu bar dropdown which closes when you click away)
 3. Run:
 
 ```
