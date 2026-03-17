@@ -36,6 +36,60 @@ enum SecurityType: UInt8, CustomStringConvertible {
     }
 }
 
+// MARK: - JSON Config
+
+/// Structure for --config JSON file. Contains only bulb SSIDs — never credentials.
+struct BulbConfig: Decodable {
+    let bulbs: [String]
+}
+
+/// Reads bulb SSIDs from a JSON config file.
+/// Expected format: { "bulbs": ["LIFX A19 D073D5", "LIFX BR30 A1B2C3"] }
+func loadBulbConfig(path: String) -> [String]? {
+    let url = URL(fileURLWithPath: path)
+    guard let data = try? Data(contentsOf: url) else {
+        print("Error: cannot read config file '\(path)'")
+        return nil
+    }
+    guard let config = try? JSONDecoder().decode(BulbConfig.self, from: data) else {
+        print("Error: invalid JSON in '\(path)' — expected { \"bulbs\": [\"LIFX ...\", ...] }")
+        return nil
+    }
+    if config.bulbs.isEmpty {
+        print("Error: config file contains no bulbs")
+        return nil
+    }
+    return config.bulbs
+}
+
+// MARK: - Password Prompt
+
+/// Prompts for password on stdin with echo disabled so it stays out of shell history and screen.
+func promptPassword() -> String? {
+    print("WiFi password: ", terminator: "")
+    let oldSettings = enableRawMode()
+    defer { restoreTerminal(oldSettings) }
+    guard let password = readLine(strippingNewline: true) else { return nil }
+    print("")  // newline after hidden input
+    return password.isEmpty ? nil : password
+}
+
+/// Disables terminal echo for password entry.
+func enableRawMode() -> termios {
+    var old = termios()
+    tcgetattr(STDIN_FILENO, &old)
+    var new = old
+    new.c_lflag &= ~UInt(ECHO)
+    tcsetattr(STDIN_FILENO, TCSANOW, &new)
+    return old
+}
+
+/// Restores terminal settings after password entry.
+func restoreTerminal(_ settings: termios) {
+    var s = settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &s)
+}
+
 // MARK: - Shell Helpers
 
 @discardableResult
@@ -184,26 +238,33 @@ func printUsage() {
     lifx-provision — LIFX bulk WiFi provisioning for macOS
 
     Usage:
-      lifx-provision --ssid <network> --password <password> --bulb <name> [--bulb <name2>...]
-      lifx-provision --ssid <network> --password <password> --bulb <name> --dry-run
+      lifx-provision --ssid <network> --bulb <name> [--bulb <name2>...]
+      lifx-provision --ssid <network> --config <file.json>
 
     Options:
       --ssid <name>        Target WiFi network name (required)
-      --password <pass>    Target WiFi password (required)
       --security <type>    Security type: open, wpa2-aes (default), wpa2-tkip, wpa2-mixed
-      --bulb <name>        LIFX bulb SSID to provision (repeatable, required)
+      --bulb <name>        LIFX bulb SSID to provision (repeatable)
+      --config <file>      JSON file with bulb SSIDs (see below)
       --dry-run            Show what would happen without doing it
 
-    The bulb SSIDs are visible in the WiFi menu bar when bulbs are in AP mode
-    (after hardware reset — power cycle 5 times).
+    The password is always prompted interactively so it never appears in
+    your shell history or on screen.
 
-    Example:
-      lifx-provision --ssid "MyNetwork" --password "secret" --bulb "LIFX A19 D073D5"
+    The --config file contains only bulb names, never credentials:
+      { "bulbs": ["LIFX A19 D073D5", "LIFX BR30 A1B2C3"] }
+
+    The bulb SSIDs are visible in System Settings → WiFi when bulbs are
+    in AP mode (after hardware reset — power cycle 5 times).
+
+    Examples:
+      lifx-provision --ssid "MyNetwork" --bulb "LIFX A19 D073D5"
+      lifx-provision --ssid "MyNetwork" --config my-bulbs.json
     """)
 }
 
 var targetSSID: String?
-var targetPassword: String?
+var configPath: String?
 var security: SecurityType = .wpa2AES
 var bulbSSIDs: [String] = []
 var dryRun = false
@@ -214,9 +275,6 @@ while let arg = args.first {
     switch arg {
     case "--ssid":
         targetSSID = args.first
-        args = args.dropFirst()
-    case "--password":
-        targetPassword = args.first
         args = args.dropFirst()
     case "--security":
         if let val = args.first {
@@ -236,6 +294,9 @@ while let arg = args.first {
             bulbSSIDs.append(name)
             args = args.dropFirst()
         }
+    case "--config":
+        configPath = args.first
+        args = args.dropFirst()
     case "--dry-run":
         dryRun = true
     case "--help", "-h":
@@ -248,8 +309,22 @@ while let arg = args.first {
     }
 }
 
-if targetSSID == nil || targetPassword == nil || bulbSSIDs.isEmpty {
+// Load bulbs from config file if provided
+if let path = configPath {
+    guard let configBulbs = loadBulbConfig(path: path) else {
+        exit(1)
+    }
+    bulbSSIDs.append(contentsOf: configBulbs)
+}
+
+if targetSSID == nil || bulbSSIDs.isEmpty {
     printUsage()
+    exit(1)
+}
+
+// Prompt for password interactively — keeps it out of shell history
+guard let targetPassword = promptPassword() else {
+    print("Error: password is required")
     exit(1)
 }
 
@@ -293,7 +368,7 @@ for bulbSSID in bulbSSIDs {
     }
 
     print("  Sending credentials...")
-    if provisionBulb(ssid: targetSSID!, password: targetPassword!, security: security) {
+    if provisionBulb(ssid: targetSSID!, password: targetPassword, security: security) {
         print("  Provisioned \(bulbSSID)")
         succeeded += 1
     } else {
