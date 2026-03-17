@@ -18,3 +18,8 @@ Packages/
 
 # CocoaPods (if used)
 Pods/
+
+# CLI build artifacts
+cli/lifx-provision
+cli/LIFXProvisionCLI.app/Contents/MacOS/
+cli/LIFXProvisionCLI.app/Contents/_CodeSignature/
