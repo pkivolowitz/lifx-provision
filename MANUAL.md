@@ -145,7 +145,7 @@ You'll pass these names to the tool in the next step.
 
 ### Provisioning
 
-You can provide bulb names directly on the command line:
+You can provide device names directly on the command line:
 
 ```
 ./lifx-provision --ssid "YourNetworkName" --bulb "LIFX A19 D073D5"
@@ -153,7 +153,7 @@ You can provide bulb names directly on the command line:
 
 The tool will prompt you for your WiFi password. The password is always entered interactively — it never appears in your command line or shell history.
 
-For multiple bulbs, you can repeat the `--bulb` flag, but a config file is easier. Create a JSON file (e.g., `my-bulbs.json`) listing your bulbs:
+For multiple devices, you can repeat the `--bulb` flag, but a config file is easier. Create a JSON file (e.g., `my-bulbs.json`) listing your devices:
 
 ```json
 {
@@ -165,23 +165,29 @@ For multiple bulbs, you can repeat the `--bulb` flag, but a config file is easie
 }
 ```
 
-Copy-paste the bulb names from System Settings into this file — one per line, change each to match what you see. The file contains only bulb names, never credentials. Then run:
+Copy-paste the device names from System Settings into this file — one per line, change each to match what you see. The file contains only device names, never credentials. Then run:
 
 ```
 ./lifx-provision --ssid "YourNetworkName" --config my-bulbs.json
 ```
 
-You can also combine both — `--config` and `--bulb` flags together. All bulbs from both sources are provisioned in one run.
+You can also combine both — `--config` and `--bulb` flags together. All devices from both sources are provisioned in one run.
 
 The tool will:
 1. Prompt for your WiFi password
 2. Save your current WiFi connection
-3. Switch to the first bulb's network
-4. Send your WiFi credentials to the bulb
+3. Switch to the first device's network
+4. Send your WiFi credentials to the device
 5. Switch back to your normal WiFi
-6. Repeat for each additional bulb
+6. Repeat for each additional device
 
-Your Mac will briefly disconnect from your WiFi during each bulb — this is normal. It reconnects automatically after each one.
+Your Mac will briefly disconnect from your WiFi during each device — this is normal. It reconnects automatically after each one.
+
+### Not Every Device Succeeds on the First Try
+
+Some devices may fail to provision on the first attempt. This is normal — WiFi switching and TLS handshakes can be timing-sensitive. The tool reports step-by-step diagnostics for each device so you can see exactly where it stalled.
+
+If some devices fail, just edit your config file to remove the ones that succeeded and run the tool again. Devices that were already provisioned will have rejoined your network and their SSIDs will no longer appear in the WiFi list. The ones that failed are still sitting in AP mode, waiting patiently.
 
 ### Security Types
 
@@ -212,25 +218,39 @@ Linux is actually the easiest platform for this — `nmcli` provides unrestricte
 
 ## Troubleshooting
 
-### The bulb didn't cycle through colors after power-cycling
+### Reading the Output
 
-Make sure you're toggling the power source (wall switch or smart plug), not using the LIFX app or a voice assistant. The timing is about one second between each toggle. Some bulbs need a slightly slower rhythm — try two seconds between toggles.
+The tool reports three steps for each device:
 
-### The bulb's WiFi network doesn't appear
+- **Step 1/3: Connecting** — switching your Mac's WiFi to the device's network. If this fails, you'll see the actual error from macOS (e.g., "Could not find network").
+- **Step 2/3: Waiting for DHCP** — pausing for your Mac to get an IP address from the device. The tool verifies it's on the right network and warns you if not.
+- **Step 3/3: Sending credentials via TLS** — opening an encrypted connection to the device and sending your WiFi details. You'll see the TLS connection progress (preparing, connected, packet sent) or the specific failure reason (timeout, connection refused, etc.).
 
-Give it 30 seconds after the color cycle completes. If it still doesn't appear, try the reset again or manually refresh the listing. The bulb's network is an open WiFi network, so it will show up in any standard WiFi list.
+If a device fails, the output tells you exactly which step failed and why — so you know whether the problem is WiFi range, timing, or something else.
 
-### "Could not connect to bulb" error
+### The device didn't cycle through colors after power-cycling
 
-The tool needs to connect to the bulb's WiFi network, which means temporarily leaving your normal WiFi. If the connection fails, try again — WiFi switching can occasionally take longer than expected, especially in environments with many networks.
+Make sure you're toggling the power source (wall switch or smart plug), not using the LIFX app or a voice assistant. The timing is about one second between each toggle. Some devices need a slightly slower rhythm — try two seconds between toggles.
 
-### The bulb received credentials but didn't come back online
+### The device's WiFi network doesn't appear
 
-Double-check that you typed your WiFi network name and password correctly. The network name is case-sensitive. If the credentials were wrong, the bulb will remain offline — reset it again and re-provision with the correct details.
+Give it 30 seconds after the color cycle completes. If it still doesn't appear, try the reset again or manually refresh the listing. The device's network is an open WiFi network, so it will show up in any standard WiFi list.
+
+### Failed at step 1 — could not switch WiFi
+
+The tool needs to connect to the device's WiFi network, which means temporarily leaving your normal WiFi. If the connection fails, try again — WiFi switching can occasionally take longer than expected, especially in environments with many networks. Make sure the device name in your config file matches exactly what you see in System Settings.
+
+### Failed at step 3 — TLS connection
+
+If the WiFi switch succeeded but the TLS connection failed or timed out, the device may not have been ready. Remove the devices that succeeded from your config file and try again — the failed devices are still in AP mode.
+
+### The device received credentials but didn't come back online
+
+Double-check that you typed your WiFi network name and password correctly. The network name is case-sensitive. If the credentials were wrong, the device will remain offline — reset it again and re-provision with the correct details.
 
 ### macOS: "networksetup" permission prompt
 
-The first time you run the tool, macOS may ask for permission to change your WiFi settings. This is normal — the tool needs to switch WiFi networks to reach each bulb.
+The first time you run the tool, macOS may ask for permission to change your WiFi settings. This is normal — the tool needs to switch WiFi networks to reach each device.
 
 ---
 
