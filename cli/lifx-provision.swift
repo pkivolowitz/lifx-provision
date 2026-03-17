@@ -143,8 +143,11 @@ func connectToNetwork(device: String, ssid: String, password: String? = nil) -> 
         cmd = "networksetup -setairportnetwork \(device) \"\(ssid)\""
     }
     let result = shell(cmd)
-    // networksetup returns empty string on success
-    return result.status == 0 && !result.output.contains("Error")
+    if result.status != 0 || result.output.contains("Error") {
+        print("  networksetup error (exit \(result.status)): \(result.output)")
+        return false
+    }
+    return true
 }
 
 // MARK: - Packet Construction
@@ -201,13 +204,19 @@ func provisionBulb(ssid: String, password: String, security: SecurityType) -> Bo
 
     connection.stateUpdateHandler = { state in
         switch state {
+        case .preparing:
+            print("  TLS: preparing connection...")
+        case .waiting(let error):
+            print("  TLS: waiting — \(error.localizedDescription)")
         case .ready:
+            print("  TLS: connected, sending \(packet.count)-byte packet...")
             connection.send(content: packet, completion: .contentProcessed { error in
                 if let error {
                     print("  Send failed: \(error.localizedDescription)")
                     connection.cancel()
                     semaphore.signal()
                 } else {
+                    print("  Packet sent, waiting for bulb to process...")
                     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
                         success = true
                         connection.cancel()
@@ -220,14 +229,18 @@ func provisionBulb(ssid: String, password: String, security: SecurityType) -> Bo
             connection.cancel()
             semaphore.signal()
         case .cancelled:
-            semaphore.signal()
+            break
         default:
             break
         }
     }
 
     connection.start(queue: .global())
-    _ = semaphore.wait(timeout: .now() + 20.0)
+    let waitResult = semaphore.wait(timeout: .now() + 20.0)
+    if waitResult == .timedOut {
+        print("  Timed out after 20 seconds — bulb did not respond")
+        connection.cancel()
+    }
     return success
 }
 
@@ -349,30 +362,32 @@ var failed = 0
 for bulbSSID in bulbSSIDs {
     print("\n--- \(bulbSSID) ---")
 
-    print("  Connecting to \(bulbSSID)...")
+    print("  Step 1/3: Connecting to \(bulbSSID)...")
     guard connectToNetwork(device: device, ssid: bulbSSID) else {
-        print("  FAILED to connect")
+        print("  FAILED at step 1 — could not switch WiFi to bulb's network")
+        print("  Check that the bulb is still in AP mode and within range")
         failed += 1
         continue
     }
 
-    // Wait for DHCP
-    print("  Waiting for DHCP...")
+    print("  Step 2/3: Waiting for DHCP...")
     sleep(4)
 
     let current = currentSSID(device: device)
     if current == bulbSSID {
         print("  Connected to \(bulbSSID)")
     } else {
-        print("  WARNING: current network is '\(current ?? "none")', trying anyway")
+        print("  WARNING: expected '\(bulbSSID)' but connected to '\(current ?? "none")'")
+        print("  This usually means the WiFi switch didn't complete — trying anyway")
     }
 
-    print("  Sending credentials...")
+    print("  Step 3/3: Sending credentials via TLS...")
     if provisionBulb(ssid: targetSSID!, password: targetPassword, security: security) {
-        print("  Provisioned \(bulbSSID)")
+        print("  SUCCESS — \(bulbSSID) provisioned")
         succeeded += 1
     } else {
-        print("  FAILED to provision \(bulbSSID)")
+        print("  FAILED at step 3 — could not send credentials to bulb")
+        print("  The TLS connection to 172.16.0.1:56700 did not complete")
         failed += 1
     }
 
