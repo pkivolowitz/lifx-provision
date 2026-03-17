@@ -4,11 +4,11 @@ Copyright (c) 2026 Perry Kivolowitz — MIT License (see [LICENSE](LICENSE))
 
 Changed your WiFi password? Moved to a new router? Every LIFX bulb in your house just went dark, and the official app wants you to re-provision them one at a time. If you have a handful of bulbs, that's annoying. If you have thirty, it's a nightmare.
 
-This tool tries to fix that. It sends your new WiFi credentials to each bulb in a fraction of the time to which are your accustomed. 
+This tool tries to fix that. It sends your new WiFi credentials to each bulb in a fraction of the time to which you are accustomed. 
 
 You manually reset your bulbs (we can't avoid that), run the tool, and they all come back online.
 
-Don't be upset with LIFX because they don't offer a reset command. Imagine if someone broke into your network and reset all your light. The lack of the command is a feature not a bug.
+Don't be upset with LIFX because they don't offer a reset command. Imagine if someone broke into your network and reset all your lights. The lack of the command is a feature not a bug.
 
 Note that your WiFi password never leaves the device you are using this app on.
 
@@ -57,7 +57,7 @@ Once a bulb is reset, it stays in setup mode until it receives new WiFi credenti
 
 ## iOS (iPhone)
 
-**Heads up:** If you have access to a Mac, the [macOS version](#macos-mac) is much easier to get running. The iOS app works well once installed, but getting it onto your phone is a hassle because Apple would likely never allow it on the App Store — as it works around an iOS WiFi restriction that Apple enforces (cudos to us for thinking outside the box). You'll need to build it from source with Xcode, which means either a free Apple Developer account (app expires every 7 days and must be reinstalled) or a paid account ($99/year). If that doesn't scare you off, read on.
+**Heads up:** If you have access to a Mac, the [macOS version](#macos-mac) is much easier to get running. The iOS app works well once installed, but getting it onto your phone is a hassle because Apple would likely never allow it on the App Store — as it works around an iOS WiFi restriction that Apple enforces (kudos to us for thinking outside the box). You'll need to build it from source with Xcode, which means either a free Apple Developer account (app expires every 7 days and must be reinstalled) or a paid account ($99/year). If that doesn't scare you off, read on.
 
 ### What You Need
 
