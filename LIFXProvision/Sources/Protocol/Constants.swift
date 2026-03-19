@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// LIFX protocol constants for bulb provisioning.
 /// Values verified against tserong/lifx-hacks reference implementation.
 

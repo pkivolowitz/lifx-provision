@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Connects to a named SSID via NEHotspotConfiguration and
 /// reconnects to the home network after provisioning.
 

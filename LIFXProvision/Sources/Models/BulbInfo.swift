@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Model representing a discovered LIFX bulb in AP mode.
 
 import Foundation

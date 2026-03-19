@@ -1,4 +1,5 @@
 #!/usr/bin/env swift
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// LIFX bulk WiFi provisioning CLI for macOS.
 /// Uses networksetup for WiFi switching (no Location Services needed).
 /// User provides bulb SSIDs from the WiFi menu bar.
@@ -260,6 +261,7 @@ func printUsage() {
       --bulb <name>        LIFX device SSID to provision (repeatable, must start with "LIFX ")
       --config <file>      JSON file with device SSIDs (see below)
       --dry-run            Show what would happen without doing it
+      -q, --quiet          Suppress the copyright banner
 
     The password is always prompted interactively so it never appears in
     your shell history or on screen.
@@ -281,6 +283,7 @@ var configPath: String?
 var security: SecurityType = .wpa2AES
 var bulbSSIDs: [String] = []
 var dryRun = false
+var quiet = false
 
 var args = CommandLine.arguments.dropFirst()
 while let arg = args.first {
@@ -317,6 +320,8 @@ while let arg = args.first {
         args = args.dropFirst()
     case "--dry-run":
         dryRun = true
+    case "--quiet", "-q":
+        quiet = true
     case "--help", "-h":
         printUsage()
         exit(0)
@@ -338,6 +343,13 @@ if let path = configPath {
 if targetSSID == nil || bulbSSIDs.isEmpty {
     printUsage()
     exit(1)
+}
+
+// Banner
+if !quiet {
+    print("lifx-provision — Copyright (c) 2026 Perry Kivolowitz")
+    print("MIT License — https://github.com/pkivolowitz/lifx-provision")
+    print()
 }
 
 // Prompt for password interactively — keeps it out of shell history

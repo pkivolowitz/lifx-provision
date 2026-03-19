@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Root view — displays screenshot, runs OCR, shows discovered bulb SSIDs,
 /// and provisions bulbs with new WiFi credentials.
 

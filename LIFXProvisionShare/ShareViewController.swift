@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Share Extension: receives an image from the share sheet,
 /// shows a preview for confirmation, then saves to the App Group container.
 

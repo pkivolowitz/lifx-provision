@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// LIFX protocol packet construction.
 /// Builds the 36-byte header and SetAccessPoint payload.
 /// Verified against tserong/lifx-hacks reference implementation.

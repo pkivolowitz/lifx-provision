@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// TLS connection to LIFX bulb AP at 172.16.0.1:56700.
 /// Sends SetAccessPoint (message type 305) with new WiFi credentials.
 ///

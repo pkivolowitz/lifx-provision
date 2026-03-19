@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Extracts "LIFX Bulb-*" SSIDs from a screenshot of Settings → WiFi
 /// using Vision framework (VNRecognizeTextRequest).
 

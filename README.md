@@ -1,3 +1,5 @@
+Copyright (c) 2026 Perry Kivolowitz — MIT License (see [LICENSE](LICENSE))
+
 # LIFX Bulk WiFi Provisioning Tool
 
 Provision LIFX smart devices with new WiFi credentials after a hardware reset. One command (macOS) or a few taps (iOS) replaces the tedious per-device process through the LIFX app.

@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Perry Kivolowitz — MIT License (see LICENSE)
 /// Sheet for entering target WiFi credentials before provisioning a bulb.
 
 import SwiftUI
