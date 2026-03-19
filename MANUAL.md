@@ -2,11 +2,11 @@ Copyright (c) 2026 Perry Kivolowitz — MIT License (see [LICENSE](LICENSE))
 
 # LIFX Bulk WiFi Provisioning Tool
 
-Changed your WiFi password? Moved to a new router? Every LIFX bulb in your house just went dark, and the official app wants you to re-provision them one at a time. If you have a handful of bulbs, that's annoying. If you have thirty, it's a nightmare.
+Changed your WiFi password? Moved to a new router? Every LIFX device in your house just went dark, and the official app wants you to re-provision them one at a time. If you have a handful of devices, that's annoying. If you have thirty, it's a nightmare.
 
-This tool tries to fix that. It sends your new WiFi credentials to each bulb in a fraction of the time to which you are accustomed. 
+This tool tries to fix that. It sends your new WiFi credentials to each device in a fraction of the time to which you are accustomed.
 
-You manually reset your bulbs (we can't avoid that), run the tool, and they all come back online.
+You manually reset your devices (we can't avoid that), run the tool, and they all come back online.
 
 Don't be upset with LIFX because they don't offer a reset command. Imagine if someone broke into your network and reset all your lights. The lack of the command is a feature not a bug.
 
@@ -15,7 +15,7 @@ Note that your WiFi password never leaves the device you are using this app on.
 ## Table of Contents
 
 - [What You Need to Know First](#what-you-need-to-know-first)
-- [Step 1: Reset Your Bulbs](#step-1-reset-your-bulbs)
+- [Step 1: Reset Your Devices](#step-1-reset-your-devices)
 - **Choose your platform:**
   - [iOS (iPhone)](#ios-iphone)
   - [macOS (Mac)](#macos-mac)
@@ -28,30 +28,30 @@ Note that your WiFi password never leaves the device you are using this app on.
 
 ## What You Need to Know First
 
-Every LIFX bulb stores your WiFi network name and password internally. When you change your WiFi password (or get a new router), the bulbs can't connect anymore because they're still trying to use the old credentials.
+Every LIFX device stores your WiFi network name and password internally. When you change your WiFi password (or get a new router), the devices can't connect anymore because they're still trying to use the old credentials.
 
-The only way to give a bulb new WiFi credentials is:
+The only way to give a device new WiFi credentials is:
 
-1. **Reset the bulb** — this puts it into setup mode
+1. **Reset the device** — this puts it into setup mode
 2. **Send it your new WiFi details** — that's what this tool does
 
-There is no way to skip the reset step. It's a hardware requirement, not a limitation of this tool. The good news: you can reset all your bulbs as you would anyway, then provision them all in one session rather than one-by-one.
+There is no way to skip the reset step. It's a hardware requirement, not a limitation of this tool. The good news: you can reset all your devices at once, then provision them all in one session rather than one-by-one.
 
 ---
 
-## Step 1: Reset Your Bulbs
+## Step 1: Reset Your Devices
 
-To reset a LIFX bulb, turn it off and on **five times in a row** using the physical light switch or power source. Wait about one second between each toggle. You'll know it worked when the bulb starts cycling through colors (red, green, blue, white). If the bulb is a monochrome light (one color like white), it will still do a little dance.
+To reset a LIFX device, turn it off and on **five times in a row** using the physical light switch or power source. Wait about one second between each toggle. You'll know it worked when the device starts cycling through colors (red, green, blue, white). If the device is a monochrome light (one color like white), it will still do a little dance.
 
-A reset bulb creates its own small WiFi network with a name like:
+A reset device creates its own small WiFi network with a name like:
 
 > LIFX White D073D5
 
-The name always starts with "LIFX" followed by the bulb model and some letters/numbers that identify that specific bulb.
+The name always starts with "LIFX" followed by the device model and some letters/numbers that identify that specific device.
 
-**You can reset as many bulbs as you like at the same time.** Each one will create its own WiFi network, and the tool will handle them one by one.
+**You can reset as many devices as you like at the same time.** Each one will create its own WiFi network, and the tool will handle them one by one.
 
-Once a bulb is reset, it stays in setup mode until it receives new WiFi credentials. There's no rush — take your time.
+Once a device is reset, it stays in setup mode until it receives new WiFi credentials. There's no rush — take your time.
 
 ---
 
@@ -78,25 +78,25 @@ With a free account, the app expires after 7 days and you'll need to repeat this
 
 ### Step by Step
 
-1. **Reset your bulbs** using the power-cycling method described above.
+1. **Reset your devices** using the power-cycling method described above.
 
-2. **Open your iPhone's Settings app**, then tap **Wi-Fi**. You'll see your normal networks plus new entries starting with "LIFX" — one for each reset bulb. Don't tap on any of them.
+2. **Open your iPhone's Settings app**, then tap **Wi-Fi**. You'll see your normal networks plus new entries starting with "LIFX" — one for each reset device. Don't tap on any of them.
 
-3. **Take a screenshot** of the WiFi list. If you have many bulbs, scroll down and take additional screenshots to capture them all.
+3. **Take a screenshot** of the WiFi list. If you have many devices, scroll down and take additional screenshots to capture them all.
 
 4. **Share the screenshot to the LIFX Provisioning app.** Tap the screenshot in your Photos, tap the Share button (the square with an arrow), and choose "LIFX Provision" from the list. Tap Accept in the preview.
 
-5. **Open the LIFX Provisioning app.** You'll see the bulb names that were found in your screenshot.
+5. **Open the LIFX Provisioning app.** You'll see the device names that were found in your screenshot.
 
-6. **Enter your WiFi credentials.** Tap a bulb, then enter your WiFi network name and password. The network name is saved for convenience; the password is never stored.
+6. **Enter your WiFi credentials.** Tap a device, then enter your WiFi network name and password. The network name is saved for convenience; the password is never stored.
 
-7. **Tap Provision.** Your phone will briefly connect to the bulb's network (you'll see a system prompt asking to join — tap Join), send the credentials, then reconnect to your normal WiFi. The bulb will reboot and join your network.
+7. **Tap Provision.** Your phone will briefly connect to the device's network (you'll see a system prompt asking to join — tap Join), send the credentials, then reconnect to your normal WiFi. The device will reboot and join your network.
 
-8. **Repeat** for each bulb, or wait for bulk provisioning in a future update.
+8. **Repeat** for each device, or wait for bulk provisioning in a future update.
 
 ### Why Screenshots?
 
-Apple does not allow any app to scan for WiFi networks. The official LIFX app gets around this with QR codes printed on the bulbs. This app takes a different approach: you screenshot the WiFi list, and the app reads the bulb names from the image using on-device text recognition. It's a workaround, but it's reliable and keeps everything on your device.
+Apple does not allow any app to scan for WiFi networks. The official LIFX app gets around this with QR codes printed on the devices. This app takes a different approach: you screenshot the WiFi list, and the app reads the device names from the image using on-device text recognition. It's a workaround, but it's reliable and keeps everything on your device.
 
 ---
 
@@ -132,14 +132,14 @@ swiftc -O -framework Network -framework Security cli/lifx-provision.swift -o lif
 
 This produces a single file called `lifx-provision` that you can run directly.
 
-### Finding Your Bulbs
+### Finding Your Devices
 
-After resetting your bulbs, you need to find their network names:
+After resetting your devices, you need to find their network names:
 
 1. Open **System Settings** (Apple menu → System Settings)
 2. Click **Wi-Fi** in the sidebar
 3. Look through the list of available networks for entries starting with "LIFX"
-4. Write down (or remember) the full name of each bulb network
+4. Write down (or remember) the full name of each device network
 
 You'll pass these names to the tool in the next step.
 
@@ -258,22 +258,22 @@ The first time you run the tool, macOS may ask for permission to change your WiF
 
 This tool handles your WiFi password. Here's how it protects you:
 
-- **Your password is sent directly to the bulb over an encrypted (TLS) connection.** It never touches the internet.
+- **Your password is sent directly to the device over an encrypted (TLS) connection.** It never touches the internet.
 - **Your password is never written to disk, logged, or stored** (the iOS app saves your network name for convenience, but never the password).
 - **The tool is fully open source.** You can read every line of code before trusting it with your credentials.
-- **The tool works entirely offline.** No network access is needed beyond the direct WiFi connection to each bulb.
+- **The tool works entirely offline.** No network access is needed beyond the direct WiFi connection to each device.
 
-The one thing to be aware of: during provisioning, your device connects to the bulb's open WiFi network. Someone within WiFi range could theoretically see that you're connected to a "LIFX" network, but the actual credentials are encrypted in transit.
+The one thing to be aware of: during provisioning, your computer connects to the LIFX device's open WiFi network. Someone within WiFi range could theoretically see that you're connected to a "LIFX" network, but the actual credentials are encrypted in transit.
 
 ---
 
 ## Technical Reference
 
-This section documents the LIFX provisioning protocol for developers and contributors. If you're just trying to provision your bulbs, you don't need any of this.
+This section documents the LIFX provisioning protocol for developers and contributors. If you're just trying to provision your devices, you don't need any of this.
 
-### Bulb AP Mode
+### Device AP Mode
 
-After a hardware reset (power cycle 5 times), a LIFX bulb:
+After a hardware reset (power cycle 5 times), a LIFX device:
 - Broadcasts an open WiFi network named "LIFX \<model\> \<3 hex octets\>"
 - Runs a TLS server at 172.16.0.1:56700
 - Uses a self-signed certificate
@@ -324,15 +324,15 @@ These values were verified against the [tserong/lifx-hacks](https://github.com/t
 
 ### Connection Sequence
 
-1. Connect to the bulb's open WiFi AP
+1. Connect to the device's open WiFi AP
 2. Wait for DHCP (2-4 seconds)
 3. Open TLS connection to 172.16.0.1:56700 (accept self-signed cert)
 4. Send the 134-byte SetAccessPoint packet
-5. Wait 2 seconds for the bulb to process
+5. Wait 2 seconds for the device to process
 6. Close the connection
-7. Disconnect from the bulb's AP
+7. Disconnect from the device's AP
 
-The bulb reboots and attempts to join the specified network. There is no acknowledgment message.
+The device reboots and attempts to join the specified network. There is no acknowledgment message.
 
 ### macOS CLI Implementation Notes
 
@@ -345,7 +345,7 @@ Single Swift file (`cli/lifx-provision.swift`). No external dependencies.
 
 Does not use CoreWLAN. Apple requires Location Services authorization for CoreWLAN, which is effectively unavailable to CLI tools on modern macOS.
 
-**TLS** uses `NWConnection` (Network framework) with `NWProtocolTLS.Options`. Certificate verification is disabled via `sec_protocol_options_set_verify_block` to accept the bulb's self-signed certificate.
+**TLS** uses `NWConnection` (Network framework) with `NWProtocolTLS.Options`. Certificate verification is disabled via `sec_protocol_options_set_verify_block` to accept the device's self-signed certificate.
 
 ### iOS App Implementation Notes
 

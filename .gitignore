@@ -20,6 +20,17 @@ Packages/
 Pods/
 
 # CLI build artifacts
+lifx-provision
 cli/lifx-provision
 cli/LIFXProvisionCLI.app/Contents/MacOS/
 cli/LIFXProvisionCLI.app/Contents/_CodeSignature/
+
+# User config files (may contain device SSIDs)
+bulbs.json
+*.json.bak
+
+# Claude Code
+.claude/
+
+# Misc
+iot_scan.txt

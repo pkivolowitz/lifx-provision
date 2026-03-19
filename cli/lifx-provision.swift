@@ -257,17 +257,17 @@ func printUsage() {
     Options:
       --ssid <name>        Target WiFi network name (required)
       --security <type>    Security type: open, wpa2-aes (default), wpa2-tkip, wpa2-mixed
-      --bulb <name>        LIFX bulb SSID to provision (repeatable)
-      --config <file>      JSON file with bulb SSIDs (see below)
+      --bulb <name>        LIFX device SSID to provision (repeatable, must start with "LIFX ")
+      --config <file>      JSON file with device SSIDs (see below)
       --dry-run            Show what would happen without doing it
 
     The password is always prompted interactively so it never appears in
     your shell history or on screen.
 
-    The --config file contains only bulb names, never credentials:
+    The --config file contains only device names, never credentials:
       { "bulbs": ["LIFX A19 D073D5", "LIFX BR30 A1B2C3"] }
 
-    The bulb SSIDs are visible in System Settings → WiFi when bulbs are
+    Device SSIDs are visible in System Settings → WiFi when devices are
     in AP mode (after hardware reset — power cycle 5 times).
 
     Examples:
@@ -304,6 +304,11 @@ while let arg = args.first {
         }
     case "--bulb":
         if let name = args.first {
+            if !name.hasPrefix("LIFX ") {
+                print("WARNING: '\(name)' doesn't look like a LIFX device SSID (expected 'LIFX ...')")
+                print("  Did you mean --config \(name)?")
+                exit(1)
+            }
             bulbSSIDs.append(name)
             args = args.dropFirst()
         }
