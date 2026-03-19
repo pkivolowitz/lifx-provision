@@ -20,6 +20,7 @@ Note that your WiFi password never leaves the device you are using this app on.
   - [iOS (iPhone)](#ios-iphone)
   - [macOS (Mac)](#macos-mac)
   - [Windows and Linux](#windows-and-linux)
+- [After Provisioning](#after-provisioning) — getting devices into LIFX app and Apple Home
 - [Troubleshooting](#troubleshooting)
 - [Security and Privacy](#security-and-privacy)
 - [Technical Reference](#technical-reference) — protocol details for developers and contributors
@@ -200,6 +201,30 @@ Most home networks use WPA2 (the default). If your network uses a different secu
 Available options: `open`, `wep`, `wpa-tkip`, `wpa-aes`, `wpa2-aes` (default), `wpa2-tkip`, `wpa2-mixed`
 
 If you're not sure what your network uses, the default (`wpa2-aes`) is almost certainly correct.
+
+---
+
+## After Provisioning
+
+Once a device is provisioned, it reboots and joins your WiFi network. Here's how to get it back into your apps.
+
+### LIFX App
+
+The LIFX app discovers devices automatically over your local network. Just open the app — your provisioned devices should appear within a few seconds. If they don't, pull down to refresh or restart the app.
+
+No re-pairing or additional setup is needed. The app finds them by broadcasting on your network, and the devices respond.
+
+### Apple Home (HomeKit)
+
+If your LIFX devices were previously in Apple Home, you may need to re-add them. HomeKit pairing is separate from WiFi provisioning — it happens over your local network after the device is already connected to WiFi (not through the device's AP mode).
+
+1. Open the **Home** app on your iPhone
+2. Tap **+** → **Add Accessory**
+3. Scan or enter the HomeKit setup code (the 8-digit code printed on the device or its original packaging)
+
+The device must be on the same WiFi network as your iPhone. Not all LIFX models support HomeKit — check your model's specifications.
+
+**Tip:** If you've lost the HomeKit code, check the LIFX app — some models display it under device settings. Worst case, you may need to contact LIFX support.
 
 ---
 
